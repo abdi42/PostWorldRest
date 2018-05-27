@@ -1,18 +1,23 @@
 var faker = require('faker');
 
+var distanceText = [
+  "Here",
+  "Very Close",
+  "Close",
+  "Far Away",
+  "Omaha",
+  "Papillion",
+  "Council Bluff"
+]
+
+var times = [
+  Math.floor((Math.random() * 60) + 1) + "m",
+  Math.floor((Math.random() * 24) + 1) + "h",
+  "Just Now",
+]
+
 exports.posts = function(){
   var data = []
-
-  var distanceText = [
-    "Here",
-    "Very Close",
-    "Close",
-    "Far Away",
-    "Omaha",
-    "Papillion",
-    "Council Bluff"
-  ]
-
 
   for(var i=0;i<10;i++){
     var geoPosted = false;
@@ -26,31 +31,25 @@ exports.posts = function(){
       likes:Math.floor((Math.random() * 20) + 1),
       distance:distanceText[Math.floor((Math.random() * 6) + 0)],
       comments:generateComments(),
+      time:times[Math.floor((Math.random() * times.length) + 0)],
       votes:[],
       geo:[]
     }
 
     if(d < 40 || i == 0){
       geoPosted = true;
-      post.geo = generateLocation(41.248708,-96.01927,200);
+      post.geo = generateLocation(41.255108,-96.020321,400);
     }
 
 
-    for(var c=0;c< Math.floor((Math.random() * 100) + 1);c++){
-      var upvoted = faker.random.boolean();
-
+    for(var c=0;c< faker.random.number({min:10, max:100});c++){
       var vote = {
         postId:post.id,
         username:faker.internet.userName(),
-        upVoted:upvoted
+        upVoted:true
       }
 
-      if(upvoted){
-        voteCount+=1
-      }
-      else {
-        voteCount-=1
-      }
+      voteCount+=1
 
       post.votes.push(vote);
     }
@@ -75,6 +74,8 @@ function generateComments(){
       username:faker.internet.userName(),
       content:faker.lorem.paragraph(),
       comments:Math.floor((Math.random() * 40) + 1),
+      time:times[Math.floor((Math.random() * times.length) + 0)],
+      distance:distanceText[Math.floor((Math.random() * 6) + 0)],
       votes:Math.floor((Math.random() * 100) + 1)
     }
 
